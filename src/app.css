@@ -27,3 +27,46 @@
 :root.dark {
   color-scheme: dark;
 }
+
+/* WebHID only works in Chromium anyway, so it's safe to target the
+   Chromium-only scrollbar pseudo-elements directly rather than pull in a
+   plugin. `scrollbar-width`/`scrollbar-color` cover Firefox as a fallback
+   in case this ever runs there for non-hardware parts of the UI. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #d4d4d4 transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-button {
+  display: none;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #d4d4d4; /* neutral-300 */
+  border-radius: 9999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #a3a3a3; /* neutral-400 */
+}
+
+.dark {
+  scrollbar-color: #404040 transparent;
+}
+
+.dark *::-webkit-scrollbar-thumb {
+  background-color: #404040; /* neutral-700 */
+}
+
+.dark *::-webkit-scrollbar-thumb:hover {
+  background-color: #525252; /* neutral-600 */
+}

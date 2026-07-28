@@ -172,9 +172,9 @@
   }
 </script>
 
-<main class="min-h-svh bg-gradient-to-b from-neutral-50 to-neutral-100 p-4 text-neutral-900 sm:p-6 dark:from-neutral-950 dark:to-neutral-900 dark:text-neutral-100">
-  <div class="mx-auto flex w-full max-w-7xl flex-col">
-    <header class="mb-4 flex items-center gap-3">
+<main class="flex h-svh flex-col overflow-hidden bg-gradient-to-b from-neutral-50 to-neutral-100 p-4 text-neutral-900 sm:p-6 dark:from-neutral-950 dark:to-neutral-900 dark:text-neutral-100">
+  <div class="mx-auto flex w-full max-w-7xl min-h-0 flex-1 flex-col">
+    <header class="mb-4 flex shrink-0 items-center gap-3">
       <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-accent text-sm font-bold text-white shadow-lg" style="box-shadow: 0 8px 20px -8px var(--accent)">
         X3
       </div>
@@ -211,7 +211,7 @@
     </header>
 
     {#if !device}
-      <section class="flex flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-300 py-24 text-center dark:border-neutral-700">
+      <section class="flex min-h-0 flex-1 flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-300 p-6 text-center dark:border-neutral-700">
         <p class="mb-1 text-sm font-medium">No mouse connected</p>
         <p class="max-w-xs text-xs text-neutral-500 dark:text-neutral-400">
           Click Connect and pick the X3 from the browser's device picker. If more than one entry
@@ -220,12 +220,12 @@
         </p>
       </section>
     {:else}
-      <div class="grid grid-cols-1 gap-4 lg:grid-cols-[1.6fr_1fr]">
-        <section class="rounded-2xl border border-neutral-200/80 bg-white/80 p-4 shadow-sm backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-900/80">
-          <h2 class="mb-2 text-xs font-semibold tracking-wide text-neutral-500 uppercase dark:text-neutral-400">
+      <div class="grid min-h-0 flex-1 grid-cols-1 gap-4 sm:grid-cols-[1.6fr_1fr]">
+        <section class="flex min-h-0 flex-col rounded-2xl border border-neutral-200/80 bg-white/80 p-4 shadow-sm backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-900/80">
+          <h2 class="mb-2 shrink-0 text-xs font-semibold tracking-wide text-neutral-500 uppercase dark:text-neutral-400">
             DPI Stages
           </h2>
-          <div class="flex flex-col gap-2">
+          <div class="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-2">
             {#each { length: STAGE_COUNT } as _, i}
               {@const index = i + 1}
               <DpiStageRow
@@ -243,8 +243,8 @@
           </div>
         </section>
 
-        <div class="flex flex-col gap-4">
-          <section class="rounded-2xl border border-neutral-200/80 bg-white/80 p-4 shadow-sm backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-900/80">
+        <div class="flex min-h-0 flex-col gap-4">
+          <section class="shrink-0 rounded-2xl border border-neutral-200/80 bg-white/80 p-4 shadow-sm backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-900/80">
             <h2 class="mb-2 text-xs font-semibold tracking-wide text-neutral-500 uppercase dark:text-neutral-400">
               Polling Rate
             </h2>
@@ -259,10 +259,10 @@
 
           {#if settings.showLog}
             <section class="flex min-h-0 flex-1 flex-col rounded-2xl border border-neutral-200/80 bg-white/80 p-4 shadow-sm backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-900/80">
-              <h2 class="mb-2 text-xs font-semibold tracking-wide text-neutral-500 uppercase dark:text-neutral-400">
+              <h2 class="mb-2 shrink-0 text-xs font-semibold tracking-wide text-neutral-500 uppercase dark:text-neutral-400">
                 Debug Log
               </h2>
-              <div class="max-h-64 min-h-24 overflow-y-auto rounded-lg bg-neutral-100 p-2.5 font-mono text-[11px] break-all text-neutral-500 dark:bg-neutral-950 dark:text-neutral-400">
+              <div class="min-h-16 flex-1 overflow-y-auto rounded-lg bg-neutral-100 p-2.5 font-mono text-[11px] break-all text-neutral-500 dark:bg-neutral-950 dark:text-neutral-400">
                 {#each logLines as line}
                   <div>{line}</div>
                 {:else}
