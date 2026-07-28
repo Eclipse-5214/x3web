@@ -50,4 +50,4 @@ Built with Svelte 5 + TypeScript, Vite, and Tailwind CSS v4. Deploys to GitHub P
 
 ## Disclaimer
 
-Unofficial, reverse-engineered, provided as-is with no affiliation to Attack Shark. Custom DPI values above 25,600 are deliberately avoided — see the `DPI_MAX` comment in `x3protocol.ts` for why that specific boundary matters.
+This was built with the use of AI (learning about reverse engeneering and wireshark was fun too). Unofficial, reverse-engineered, provided as-is with no affiliation to Attack Shark. Custom DPI values above 25,600 are deliberately avoided — see the `DPI_MAX` comment in `x3protocol.ts` for why that specific boundary matters.
