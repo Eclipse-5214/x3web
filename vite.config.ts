@@ -22,8 +22,8 @@ export default defineConfig({
         enabled: true,
       },
       manifest: {
-        name: 'Attack Shark X3 — Web Driver',
-        short_name: 'X3 Driver',
+        name: 'X3 Web',
+        short_name: 'X3 Web',
         description: 'Unofficial WebHID configurator for the Attack Shark X3 gaming mouse.',
         theme_color: '#2563eb',
         background_color: '#fafafa',
