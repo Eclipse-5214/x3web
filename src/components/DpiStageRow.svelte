@@ -55,7 +55,7 @@
       value = Math.max(dpiMin, e.currentTarget.valueAsNumber || dpiMin);
       onApply(index);
     }}
-    class="w-16 shrink-0 rounded-md border border-neutral-300 bg-transparent px-1.5 py-1 text-right font-mono text-xs tabular-nums dark:border-neutral-700"
+    class="w-16 shrink-0 rounded-md border border-neutral-300 bg-transparent px-1.5 py-1 text-center font-mono text-xs tabular-nums dark:border-neutral-700"
   />
   <button
     onclick={() => onReset(index)}

@@ -25,8 +25,8 @@ export default defineConfig({
         name: 'X3 Web',
         short_name: 'X3 Web',
         description: 'Unofficial WebHID configurator for the Attack Shark X3 gaming mouse.',
-        theme_color: '#2563eb',
-        background_color: '#fafafa',
+        theme_color: '#0a0a0a',
+        background_color: '#0a0a0a',
         display: 'standalone',
         // Relative rather than absolute, so these resolve correctly whether
         // served from a Pages subpath or a custom domain's root.

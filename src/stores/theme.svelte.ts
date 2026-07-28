@@ -49,9 +49,27 @@ function resolvedIsDark(): boolean {
   return typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches;
 }
 
+// Matches the page's actual background (see the gradient in App.svelte) so
+// an installed PWA's title bar / status bar blends in instead of always
+// showing the accent color.
+const THEME_COLOR_LIGHT = '#fafafa'; // neutral-50
+const THEME_COLOR_DARK = '#0a0a0a'; // neutral-950
+
+function applyThemeColorMeta(isDark: boolean): void {
+  let meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  if (!meta) {
+    meta = document.createElement('meta');
+    meta.name = 'theme-color';
+    document.head.appendChild(meta);
+  }
+  meta.content = isDark ? THEME_COLOR_DARK : THEME_COLOR_LIGHT;
+}
+
 function applyTheme(): void {
   if (typeof document === 'undefined') return;
-  document.documentElement.classList.toggle('dark', resolvedIsDark());
+  const isDark = resolvedIsDark();
+  document.documentElement.classList.toggle('dark', isDark);
+  applyThemeColorMeta(isDark);
 }
 
 function applyAccent(): void {
