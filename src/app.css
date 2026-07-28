@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+/* Manual light/dark toggle instead of only following prefers-color-scheme */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Maps the runtime-configurable accent (see theme.svelte.ts) onto real
+   Tailwind color tokens, so components use bg-accent / border-accent /
+   ring-accent / accent-accent etc. instead of bg-[var(--accent)] arbitrary
+   values everywhere. */
+@theme {
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+}
+
+:root {
+  --accent: #2563eb; /* blue-600 */
+  --accent-hover: #3b82f6; /* blue-500 */
+  --accent-soft: #2563eb1a; /* ~10% */
+
+  /* Lets native form controls (color picker, scrollbars, etc.) theme
+     themselves to match our manual dark-mode toggle instead of only
+     following the OS preference. */
+  color-scheme: light;
+}
+
+:root.dark {
+  color-scheme: dark;
+}
