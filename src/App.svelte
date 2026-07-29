@@ -61,6 +61,58 @@
     saveCachedState({ stageDpi, activeStage, activeRate });
   }
 
+  function watchForDisconnect(d: HIDDevice): void {
+    navigator.hid.addEventListener('disconnect', (e) => {
+      if (e.device === d) {
+        device = null;
+        activeStage = null;
+        activeRate = null;
+        log('Device disconnected.');
+      }
+    });
+  }
+
+  // Tries each candidate device, opening it and checking whether it's the
+  // vendor config interface (the one with our DPI/polling-rate reports).
+  // Used both for a fresh grant (requestDevice) and for silently reusing an
+  // already-granted device on load (getDevices, no user gesture needed).
+  async function tryUseCandidates(candidates: HIDDevice[]): Promise<boolean> {
+    for (const d of candidates) {
+      try {
+        if (!d.opened) await d.open();
+      } catch (err) {
+        log(`Could not open ${d.productName}: ${(err as Error).message}`);
+        continue;
+      }
+      const hasDpiReport = d.collections.some((c) =>
+        c.featureReports?.some((r) => r.reportId === DPI_STAGE_REPORT_ID),
+      );
+      const hasPollingReport = d.collections.some((c) =>
+        c.featureReports?.some((r) => r.reportId === POLLING_RATE_REPORT_ID),
+      );
+      if (hasDpiReport && hasPollingReport) {
+        device = d;
+        watchForDisconnect(d);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // Runs once on load: silently reconnects to a previously granted device
+  // without prompting, since getDevices() (unlike requestDevice()) doesn't
+  // need a user gesture. Only works if this browser already granted access
+  // in an earlier visit — the very first grant always needs the Connect click.
+  async function tryAutoConnect(): Promise<void> {
+    if (!('hid' in navigator)) return;
+    const granted = await navigator.hid.getDevices();
+    const candidates = granted.filter((d) => PRODUCT_IDS.includes(d.productId));
+    if (candidates.length === 0) return;
+    if (await tryUseCandidates(candidates)) {
+      log('Reconnected automatically to a previously granted device.');
+    }
+  }
+
   async function connect(): Promise<void> {
     if (!('hid' in navigator)) {
       log('WebHID is not available. Use Chrome or Edge, served over http(s) or localhost.');
@@ -80,42 +132,16 @@
       return;
     }
 
-    for (const d of candidates) {
-      try {
-        if (!d.opened) await d.open();
-      } catch (err) {
-        log(`Could not open ${d.productName}: ${(err as Error).message}`);
-        continue;
-      }
-      const hasDpiReport = d.collections.some((c) =>
-        c.featureReports?.some((r) => r.reportId === DPI_STAGE_REPORT_ID),
-      );
-      const hasPollingReport = d.collections.some((c) =>
-        c.featureReports?.some((r) => r.reportId === POLLING_RATE_REPORT_ID),
-      );
-      if (hasDpiReport && hasPollingReport) {
-        device = d;
-        break;
-      }
-    }
-
-    if (!device) {
+    if (await tryUseCandidates(candidates)) {
+      log('Connected to config interface.');
+    } else {
       log(
         'Config interface not found among the selected device(s). Reconnect and try picking a different entry — several are usually listed for the same mouse.',
       );
-      return;
     }
-
-    log('Connected to config interface.');
-    navigator.hid.addEventListener('disconnect', (e) => {
-      if (e.device === device) {
-        device = null;
-        activeStage = null;
-        activeRate = null;
-        log('Device disconnected.');
-      }
-    });
   }
+
+  tryAutoConnect();
 
   async function applyPreset(index: number, reason: string): Promise<void> {
     stageDpi[index - 1] = DPI_PRESET_STAGES[index - 1];
